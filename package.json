@@ -1,0 +1,12 @@
+{
+  "name": "dicussify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "npm run start --prefix server"
+  },
+  "author": "",
+  "license": "ISC"
+}

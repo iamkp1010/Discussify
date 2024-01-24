@@ -115,7 +115,6 @@ async function login(req, res){
         return res.status(200)
                   .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'Lax', secure: true, expires: accessCookieExpire})
                   .cookie("refreshToken", refreshToken, {httpOnly: true, sameSite: 'Strict', secure: true, path: '/api/users/tokenRefresh'})
-                  .cookie("tempToken","1232321")
                   .json({user: loggedUser})
     }
     catch(err){

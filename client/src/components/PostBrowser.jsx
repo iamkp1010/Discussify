@@ -8,6 +8,7 @@ import {PostCard} from "./PostCard";
 import {SortBySelect} from "./SortBySelect";
 import {Loading} from "./Loading";
 import {HorizontalStack} from "./HorizontalStack";
+import { fetchPostsApi } from "../apis/postsApi";
 
 export const PostBrowser = (props) => {
   const [posts, setPosts] = useState([]);
@@ -36,70 +37,20 @@ export const PostBrowser = (props) => {
 
     let data;
 
-    // if (props.contentType === "posts") {
-    //   if (props.profileUser) query.author = props.profileUser.username;
-    //   if (searchExists) query.search = search.get("search");
+    if (props.contentType === "posts") {
+      if (props.profileUser) query.author = props.profileUser.username;
+      if (searchExists) query.search = search.get("search");
 
-    //   data = await getPosts(user && user.token, query);
-    // } else if (props.contentType === "liked") {
-    //   data = await getUserLikedPosts(
-    //     props.profileUser._id,
-    //     user && user.token,
-    //     query
-    //   );
-    // }
+      console.log("I AM AT FETCHHHHH")
+      data = await fetchPostsApi(query);
+    } else if (props.contentType === "liked") {
+      // data = await getUserLikedPosts(
+      //   props.profileUser._id,
+      //   user && user.token,
+      //   query
+      // );
+    }
 
-    data = {
-      "count": 2,
-      "data":[{
-          "_id": "658d6edf12b20c2554f923c4",
-          "poster": {
-              "_id": "658d1d9212b20c2554f921f7",
-              "username": "asuhisahi",
-              "email": "asuhisahi@gmail.com",
-              "biography": "",
-              "isAdmin": false,
-              "createdAt": "2023-12-28T07:02:42.946Z",
-              "updatedAt": "2023-12-28T07:02:42.946Z",
-              "__v": 0
-          },
-          "title": "CSAAA",
-          "content": "askskasakjassakjkjsasasassaa",
-          "likeCount": 1,
-          "commentCount": 1,
-          "edited": true,
-          "createdAt": "2023-12-28T12:49:35.943Z",
-          "updatedAt": "2023-12-28T12:51:29.816Z",
-          "__v": 0,
-          "userLikePreview": [{
-              "_id": "658d1d9212b20c2554f921f7",
-              "username": "asuhisahi"
-          }]
-      }, {
-          "_id": "658959ad1827ff1fc9cc5c32",
-          "poster": {
-              "_id": "658959111827ff1fc9cc5b3a",
-              "username": "gkchat",
-              "email": "georgeprethesh@gmail.com",
-              "biography": "lol...\n",
-              "isAdmin": false,
-              "createdAt": "2023-12-25T10:27:29.725Z",
-              "updatedAt": "2023-12-25T10:27:39.319Z",
-              "__v": 0
-          },
-          "title": "Nice ",
-          "content": "Cool",
-          "likeCount": 1,
-          "commentCount": 0,
-          "edited": false,
-          "createdAt": "2023-12-25T10:30:05.657Z",
-          "updatedAt": "2023-12-28T11:03:33.994Z",
-          "__v": 0,
-          "userLikePreview": [{
-              "_id": "658959111827ff1fc9cc5b3a",
-              "username": "gkchat"
-          }]
-    }]}
 
     if (data?.data?.length < 10) {
       setEnd(true);
@@ -113,12 +64,12 @@ export const PostBrowser = (props) => {
   };
 
   useEffect(() => {
-    // console.log(" sortby,effect useeffect")
+    console.log(" sortby,effect useeffect")
     fetchPosts();
   }, [sortBy, effect]);
 
   useEffect(() => {
-    // console.log(" Search useeffect")
+    console.log(" Search useeffect")
     setPosts([]);
     setPage(0);
     setEnd(false);
@@ -189,7 +140,6 @@ export const PostBrowser = (props) => {
             </Typography>
           </Box>
         )}
-
         {posts?.map((post, i) => (
           <PostCard
             preview="primary"
@@ -218,9 +168,9 @@ export const PostBrowser = (props) => {
           posts &&
           posts?.length > 0 && (
             <Stack pt={2} pb={6} alignItems="center" spacing={2}>
-              <Button onClick={fetchPosts} variant="contained">
+              {/* <Button onClick={fetchPosts} variant="contained">
                 Load more
-              </Button>
+              </Button> */}
               <Button variant="text" size="small" onClick={handleBackToTop}>
                 Back to top
               </Button>

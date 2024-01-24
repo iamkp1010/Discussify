@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
     biography: {
         type: String,
         default: '',
-        maxLength: 250,
+        maxLength: [250,'must be no more than 250 characters'],
     },
     posts: [{ 
         type: mongoose.Schema.Types.ObjectId, 

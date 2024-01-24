@@ -9,10 +9,10 @@ import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
-import {ContentUpdateEditor} from "../components/ContentUpdateEditor";
-import {Loading} from "../components/Loading";
-import {UserAvatar} from "../components/UserAvatar";
-import {HorizontalStack} from "../components/HorizontalStack";
+import {ContentUpdateEditor} from "./ContentUpdateEditor";
+import {Loading} from "./Loading";
+import {UserAvatar} from "./UserAvatar";
+import {HorizontalStack} from "./HorizontalStack";
 
 export const Profile = (props) => {
   const [user, setUser] = useState(null);

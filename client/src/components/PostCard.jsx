@@ -1,27 +1,21 @@
-import {
-  Card,
-  IconButton,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Card, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { AiFillCheckCircle, AiFillEdit, AiFillMessage } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
-import {ContentDetails} from "./ContentDetails";
+import { ContentDetails } from "./ContentDetails";
 
-import {LikeBox} from "./LikeBox";
-import {PostContentBox} from "./PostContentBox";
-import {HorizontalStack} from "./HorizontalStack";
-import {ContentUpdateEditor} from "./ContentUpdateEditor";
-import {Markdown} from "./Markdown";
+import { LikeBox } from "./LikeBox";
+import { PostContentBox } from "./PostContentBox";
+import { HorizontalStack } from "./HorizontalStack";
+import { ContentUpdateEditor } from "./ContentUpdateEditor";
+import { Markdown } from "./Markdown";
 
 import "./postCard.css";
 import { MdCancel } from "react-icons/md";
 import { BiTrash } from "react-icons/bi";
-import {UserLikePreview} from "./UserLikePreview";
+import { UserLikePreview } from "./UserLikePreview";
 
 export const PostCard = (props) => {
   const { preview, removePost } = props;
@@ -29,7 +23,8 @@ export const PostCard = (props) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const user = getUserDataFromLocalStorage();
-  const isAuthor = user && user.username === postData.poster.username;
+  const isAuthor = user && user.username === postData.username;
+
   const theme = useTheme();
   const iconColor = theme.palette.primary.main;
 
@@ -108,7 +103,7 @@ export const PostCard = (props) => {
           <PostContentBox clickable={preview} post={post} editing={editing}>
             <HorizontalStack justifyContent="space-between">
               <ContentDetails
-                username={post.poster.username}
+                username={post.username}
                 createdAt={post.createdAt}
                 edited={post.edited}
                 preview={preview === "secondary"}

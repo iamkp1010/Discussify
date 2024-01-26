@@ -6,17 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 
 export const LikeBox = (props) => {
-  const { likeCount, onLike } = props;
+  const { voteCount, onVote } = props;
   const theme = useTheme();
-  const [liked, setLiked] = useState(props.liked);
+  const [voted, setvoted] = useState(props.voted);
 
   const navigate = useNavigate();
 
   const handleLike = (e) => {
     if (getUserDataFromLocalStorage()) {
-      const newLikedValue = !liked;
-      setLiked(newLikedValue);
-      onLike(newLikedValue);
+      const newvotedValue = !voted;
+      setvoted(newvotedValue);
+      onVote(newvotedValue);
     } else {
       navigate("/login");
     }
@@ -25,7 +25,7 @@ export const LikeBox = (props) => {
   return (
     <Stack alignItems="center">
       <IconButton sx={{ padding: 0.5 }} onClick={handleLike}>
-        {liked ? (
+        {voted ? (
           <IconContext.Provider value={{ color: theme.palette.primary.main }}>
             <AiFillLike />
           </IconContext.Provider>
@@ -33,7 +33,7 @@ export const LikeBox = (props) => {
           <AiOutlineLike />
         )}
       </IconButton>
-      <Typography>{likeCount}</Typography>
+      <Typography>{voteCount}</Typography>
     </Stack>
   );
 };

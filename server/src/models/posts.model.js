@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const UserModel = require('../models/users.model')
 
 //! Filter out bad words 
 
@@ -7,7 +6,7 @@ const postSchema = new mongoose.Schema({
     author: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: UserModel,
+      ref: "users",
     },
     title: {
       type: String,
@@ -19,7 +18,7 @@ const postSchema = new mongoose.Schema({
       required: true,
       maxLength: [500,'must be no more than 500 characters'],
     },
-    votes: {
+    voteCount: {
       type: Number,
       default: 0,
     },
@@ -27,6 +26,10 @@ const postSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
+    edited:{
+      type: Boolean,
+      default: false,
+    }
   },
   {
     timestamps: true,

@@ -49,14 +49,6 @@ const userSchema = new mongoose.Schema({
         default: '',
         maxLength: [250,'must be no more than 250 characters'],
     },
-    posts: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Post' 
-    }],
-    comments: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Comment' 
-    }],
     thirdPartyLogin: {
         type: Boolean,
         default: false

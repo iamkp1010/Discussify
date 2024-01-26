@@ -16,6 +16,7 @@ import "./postCard.css";
 import { MdCancel } from "react-icons/md";
 import { BiTrash } from "react-icons/bi";
 import { UserLikePreview } from "./UserLikePreview";
+import { deletePostApi, updatePostApi } from "../apis/postsApi";
 
 export const PostCard = (props) => {
   const { preview, removePost } = props;
@@ -31,7 +32,7 @@ export const PostCard = (props) => {
   const [editing, setEditing] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [post, setPost] = useState(postData);
-  const [likeCount, setLikeCount] = useState(post.likeCount);
+  const [voteCount, setvoteCount] = useState(post?.voteCount ? post.voteCount : 0);
 
   let maxHeight = null;
   if (preview === "primary") {
@@ -45,7 +46,7 @@ export const PostCard = (props) => {
       setConfirm(true);
     } else {
       setLoading(true);
-      // api call
+      if(post && post._id) await deletePostApi(post._id)
       setLoading(false);
       if (preview) {
         removePost(post);
@@ -65,17 +66,17 @@ export const PostCard = (props) => {
     e.preventDefault();
 
     const content = e.target.content.value;
-    // api call
+    if(post && post._id) await updatePostApi(post._id, {content})
     setPost({ ...post, content, edited: true });
     setEditing(false);
   };
 
-  const handleLike = async (liked) => {
-    if (liked) {
-      setLikeCount(likeCount + 1);
+  const handleVote = async (voted) => {
+    if (voted) {
+      setvoteCount(voteCount + 1);
       // api call
     } else {
-      setLikeCount(likeCount - 1);
+      setvoteCount(voteCount - 1);
       // api call
     }
   };
@@ -95,12 +96,12 @@ export const PostCard = (props) => {
             }}
           >
             <LikeBox
-              likeCount={likeCount}
-              liked={post.liked}
-              onLike={handleLike}
+              voteCount={voteCount}
+              voted={post.isUpvoted}
+              onVote={handleVote}
             />
           </Stack>
-          <PostContentBox clickable={preview} post={post} editing={editing}>
+        <PostContentBox clickable={preview} post={post} editing={editing}>
             <HorizontalStack justifyContent="space-between">
               <ContentDetails
                 username={post.username}

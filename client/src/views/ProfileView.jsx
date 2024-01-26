@@ -2,7 +2,6 @@ import { Card, Container, Stack, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 // import { getUser, updateUser } from "../../api/users";
-// import { isLoggedIn } from "../../helpers/authHelper";
 // import {CommentBrowser} from "../CommentBrowser";
 
 import {ErrorAlert} from "../components/ErrorAlert";
@@ -15,13 +14,15 @@ import {Navbar} from "../components/Navbar";
 import {PostBrowser} from "../components/PostBrowser";
 import {Profile} from "../components/Profile";
 import {ProfileTabs} from "../components/ProfileTabs";
+import { getUserDataFromLocalStorage } from "../helpers/authHelper";
+import { fetchUserInfoApi } from "../apis/usersApi";
 
 export const ProfileView = () => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [editing, setEditing] = useState(false);
   const [tab, setTab] = useState("posts");
-  const user = isLoggedIn();
+  const user = getUserDataFromLocalStorage();
   const [error, setError] = useState("");
   const params = useParams();
   const navigate = useNavigate();
@@ -29,13 +30,15 @@ export const ProfileView = () => {
 
   const fetchUser = async () => {
     setLoading(true);
-    // const data = await getUser(params);
-    // setLoading(false);
-    // if (data.error) {
-    //   setError(data.error);
-    // } else {
-    //   setProfile(data);
-    // }
+    if(params?.id){
+      const {data} = await fetchUserInfoApi(params.id);
+      setLoading(false);
+      if (data?.error) {
+        setError(data.error);
+      } else if(data) {
+        setProfile(data);
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -76,19 +79,19 @@ export const ProfileView = () => {
     tabs = {
       posts: (
         <PostBrowser
-          profileUser={profile.user}
+          profileUser={profile}
           contentType="posts"
           key="posts"
         />
       ),
       liked: (
         <PostBrowser
-          profileUser={profile.user}
+          profileUser={profile}
           contentType="liked"
           key="liked"
         />
       ),
-    //   comments: <CommentBrowser profileUser={profile.user} />,
+    //   comments: <CommentBrowser profileUser={profile} />,
     };
   }
 
@@ -108,7 +111,7 @@ export const ProfileView = () => {
               validate={validate}
             /> */}
             <Stack spacin g={2}>
-              {profile ?(
+              {!error ? (profile ?(
                 <>
                   <ProfileTabs tab={tab} setTab={setTab} />
 
@@ -116,23 +119,25 @@ export const ProfileView = () => {
                 </>
               ) : (
                 <Loading />
-              )}
-              {error && <ErrorAlert error={error} />}
+              )) : <ErrorAlert error={error} />}
             </Stack>
           </>
         }
         right={
           <Stack spacing={2}>
-            <Profile
-              profile={profile}
-              editing={editing}
-              handleSubmit={handleSubmit}
-              handleEditing={handleEditing}
-              handleMessage={handleMessage}
-              validate={validate}
-            />
-
-            <FindUsers />
+            {!error && 
+              <>
+                <Profile
+                  profile={profile}
+                  editing={editing}
+                  handleSubmit={handleSubmit}
+                  handleEditing={handleEditing}
+                  handleMessage={handleMessage}
+                  validate={validate}
+                />
+                <FindUsers />
+              </>
+            }
           </Stack>
         }
       />

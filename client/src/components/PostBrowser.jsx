@@ -20,7 +20,6 @@ export const PostBrowser = (props) => {
   const user = getUserDataFromLocalStorage();
 
   const [search] = useSearchParams();
-  const [effect, setEffect] = useState(false);
 
   const searchExists =
     search && search.get("search") && search.get("search").length > 0;
@@ -31,14 +30,14 @@ export const PostBrowser = (props) => {
     setPage(newPage);
 
     let query = {
-      page: newPage,
+      pageNumber: newPage,
       sortBy,
     };
 
     let data;
 
     if (props.contentType === "posts") {
-      if (props.profileUser) query.author = props.profileUser.username;
+      if (props.profileUser) query.author = props.profileUser._id;
       if (searchExists) query.search = search.get("search");
 
       console.log("I AM AT FETCHHHHH")
@@ -57,7 +56,7 @@ export const PostBrowser = (props) => {
     }
 
     setLoading(false);
-    if (!data?.error) {
+    if (data && !data?.error) {
       setPosts([...posts, ...data?.data]);
       setCount(data.count);
     }
@@ -65,15 +64,15 @@ export const PostBrowser = (props) => {
 
   useEffect(() => {
     console.log(" sortby,effect useeffect")
-    fetchPosts();
-  }, [sortBy, effect]);
+    if(!search) fetchPosts();
+  }, [sortBy]);
 
   useEffect(() => {
     console.log(" Search useeffect")
     setPosts([]);
     setPage(0);
     setEnd(false);
-    setEffect(!effect);
+    if(search) fetchPosts();
   }, [search]);
 
   const handleSortBy = (e) => {
@@ -106,11 +105,11 @@ export const PostBrowser = (props) => {
       "-createdAt": "Latest",
       "-likeCount": "Likes",
       "-commentCount": "Comments",
-      createdAt: "Earliest",
+      "createdAt": "Earliest",
     },
     liked: {
       "-createdAt": "Latest",
-      createdAt: "Earliest",
+      "createdAt": "Earliest",
     },
   };
 
@@ -168,9 +167,9 @@ export const PostBrowser = (props) => {
           posts &&
           posts?.length > 0 && (
             <Stack pt={2} pb={6} alignItems="center" spacing={2}>
-              {/* <Button onClick={fetchPosts} variant="contained">
+              <Button onClick={fetchPosts} variant="contained">
                 Load more
-              </Button> */}
+              </Button>
               <Button variant="text" size="small" onClick={handleBackToTop}>
                 Back to top
               </Button>

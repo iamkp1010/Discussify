@@ -9,6 +9,7 @@ import { Sidebar } from "../components/Sidebar";
 import { useParams } from "react-router-dom";
 import { ErrorAlert } from "../components/ErrorAlert";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
+import { fetchPostsApi } from "../apis/postsApi";
 
 export const PostView = () => {
   const params = useParams();
@@ -20,45 +21,18 @@ export const PostView = () => {
 
   const fetchPost = async () => {
     setLoading(true);
-    // api call
-    const data = {
-      "_id": "65968facbc477d76f84858d5",
-      "poster": {
-          "_id": "65968f9cbc477d76f84858bd",
-          "username": "bikram",
-          "email": "dhimanbikram1914@gmail.com",
-          "biography": "",
-          "isAdmin": false,
-          "createdAt": "2024-01-04T10:59:40.022Z",
-          "updatedAt": "2024-01-04T10:59:40.022Z",
-          "__v": 0
-      },
-      "title": "merk",
-      "content": "jai mata di",
-      "likeCount": 1,
-      "commentCount": 3,
-      "edited": false,
-      "createdAt": "2024-01-04T10:59:56.756Z",
-      "updatedAt": "2024-01-05T14:03:54.952Z",
-      "__v": 0,
-      "userLikePreview": [
-          {
-              "_id": "6596a90bbc477d76f848595d",
-              "username": "vvv333"
-          }
-      ]
-  }
+    const {data} = await fetchPostsApi({postId:params?.id});
     if (data.error) {
       setError(data.error);
     } else {
-      setPost(data);
+      setPost(data[0]);
     }
     setLoading(false);
   };
 
   useEffect(() => {
     fetchPost();
-  }, [params.id]);
+  }, []);
 
   return (
     <Container>

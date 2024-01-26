@@ -141,10 +141,28 @@ async function protected(req,res){
     res.json({msg:"done"})
 }
 
+async function fetchUserInfo(req, res){
+    try{
+        const username = req?.params?.username
+        if(!username) throw new Error("Username is not provided!")
+
+        const userInfo = await UserModel.findOne({username}).select("-password -refreshToken")
+        if(!userInfo) throw new Error("No user found!")
+
+        res.status(200).json(userInfo)
+
+    }catch(err){
+        console.log(err.message);
+        res.status(400).json({error: err.message});
+    }
+
+}
+
 module.exports = {
     logout,
     register,
     login,
     loginWithGoogle,
-    protected
+    protected,
+    fetchUserInfo
 }

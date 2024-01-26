@@ -22,7 +22,7 @@ export const Profile = (props) => {
 
   useEffect(() => {
     if (props.profile) {
-      setUser(props.profile.user);
+      setUser(props.profile);
     }
   }, [props.profile]);
 

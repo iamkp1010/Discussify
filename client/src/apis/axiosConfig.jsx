@@ -5,7 +5,7 @@ import { removeUserDataFromLocalStorage } from "../helpers/authHelper";
 const API = await axios.create({baseURL:`${BACKEND_URL}`, withCredentials: true})
 
 API.interceptors.response.use(
-    (res) => res,
+    (res) => res.data,
     async (err) => {
         if(err.response?.status === 401){
             try{
@@ -19,7 +19,10 @@ API.interceptors.response.use(
                 return e
             }
         }
-        else return err.response
+        else {
+            if(!err.response) err.response = {error:err.message}
+            return err.response
+        }
     }
 )
 

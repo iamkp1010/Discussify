@@ -21,7 +21,7 @@ export const PostView = () => {
 
   const fetchPost = async () => {
     setLoading(true);
-    const {data} = await fetchPostsApi({postId:params?.id});
+    const data = await fetchPostsApi({postId:params?.id});
     if (data.error) {
       setError(data.error);
     } else {

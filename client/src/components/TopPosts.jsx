@@ -1,12 +1,12 @@
-import { Card, CardContent, Stack, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import { getPosts } from "../api/posts";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import {Loading} from "./Loading";
 import {PostCard} from "./PostCard";
 import {HorizontalStack} from "./HorizontalStack";
 import "react-icons/md";
 import { MdLeaderboard } from "react-icons/md";
+import { fetchPostsApi } from "../apis/postsApi";
 
 export const TopPosts = () => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,10 @@ export const TopPosts = () => {
   const user = getUserDataFromLocalStorage();
 
   const fetchPosts = async () => {
-    // api call
+    const query = { sortBy: "-voteCount", pageSize: 3};
+    let data
+    data = await fetchPostsApi(query);
+    if(data && !data.error) setPosts(data);
     setLoading(false);
   };
 

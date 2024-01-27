@@ -8,7 +8,7 @@ import {PostCard} from "./PostCard";
 import {SortBySelect} from "./SortBySelect";
 import {Loading} from "./Loading";
 import {HorizontalStack} from "./HorizontalStack";
-import { fetchPostsApi } from "../apis/postsApi";
+import { fetchPostsApi, fetchVotedPostApi } from "../apis/postsApi";
 
 export const PostBrowser = (props) => {
   const [posts, setPosts] = useState([]);
@@ -35,44 +35,36 @@ export const PostBrowser = (props) => {
     };
 
     let data;
-
     if (props.contentType === "posts") {
       if (props.profileUser) query.author = props.profileUser._id;
       if (searchExists) query.search = search.get("search");
-
-      console.log("I AM AT FETCHHHHH")
       data = await fetchPostsApi(query);
     } else if (props.contentType === "liked") {
-      // data = await getUserLikedPosts(
-      //   props.profileUser._id,
-      //   user && user.token,
-      //   query
-      // );
+      query.userId = props.profileUser._id
+      data = await fetchVotedPostApi(query);
     }
 
 
-    if (data?.data?.length < 10) {
+    if (data?.length < 10) {
       setEnd(true);
     }
 
     setLoading(false);
-    if (data && !data?.error) {
-      setPosts([...posts, ...data?.data]);
-      setCount(data.count);
+    if (data && !data.error) {
+      setPosts([...posts, ...data]);
+      setCount(data.length);
     }
   };
 
   useEffect(() => {
-    console.log(" sortby,effect useeffect")
-    if(!search) fetchPosts();
+    fetchPosts();
   }, [sortBy]);
 
   useEffect(() => {
-    console.log(" Search useeffect")
     setPosts([]);
     setPage(0);
     setEnd(false);
-    if(search) fetchPosts();
+    fetchPosts();
   }, [search]);
 
   const handleSortBy = (e) => {
@@ -103,7 +95,7 @@ export const PostBrowser = (props) => {
   const contentTypeSorts = {
     posts: {
       "-createdAt": "Latest",
-      "-likeCount": "Likes",
+      "-voteCount": "Likes",
       "-commentCount": "Comments",
       "createdAt": "Earliest",
     },

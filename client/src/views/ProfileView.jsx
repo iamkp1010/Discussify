@@ -31,7 +31,7 @@ export const ProfileView = () => {
   const fetchUser = async () => {
     setLoading(true);
     if(params?.id){
-      const {data} = await fetchUserInfoApi(params.id);
+      const data = await fetchUserInfoApi(params.id);
       setLoading(false);
       if (data?.error) {
         setError(data.error);

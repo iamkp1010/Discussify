@@ -11,6 +11,7 @@ import { MdRefresh } from "react-icons/md";
 import {Loading} from "./Loading";
 import {HorizontalStack} from "./HorizontalStack";
 import {UserEntry} from "./UserEntry";
+import { fetchRandsomUserApi } from "../apis/usersApi";
 
 export const FindUsers = () => {
   const [loading, setLoading] = useState(true);
@@ -18,8 +19,10 @@ export const FindUsers = () => {
 
   const fetchUsers = async () => {
     setLoading(true);
-    // call api for fetch users
+    const query = { size : 5 }
+    const data = await fetchRandsomUserApi(query);
     setLoading(false);
+    setUsers(data)
   };
 
   useEffect(() => {
@@ -48,11 +51,10 @@ export const FindUsers = () => {
         </HorizontalStack>
 
         <Divider />
-
         {loading ? (
           <Loading />
         ) : (
-          users &&
+          users?.length &&
           users.map((user) => (
             <UserEntry username={user.username} key={user.username} />
           ))

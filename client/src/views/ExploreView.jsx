@@ -8,7 +8,6 @@ import { Sidebar } from '../components/Sidebar';
 export const ExploreView = () => {
   return (
     <Container>
-      <Navbar />
       <GridLayout
         left={<PostBrowser createPost contentType="posts" />}
         right={<Sidebar />}

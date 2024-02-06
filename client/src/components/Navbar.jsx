@@ -5,6 +5,7 @@ import {
   TextField,
   Typography,
   Button,
+  withStyles,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
@@ -21,8 +22,26 @@ import { getUserDataFromLocalStorage, removeUserDataFromLocalStorage } from "../
 import {UserAvatar} from "./UserAvatar";
 import {HorizontalStack} from "./HorizontalStack";
 import { logoutApi, protectedApi } from "../apis/usersApi";
+import { FaSun } from "react-icons/fa6";
+import { FaMoon } from "react-icons/fa";
+import { styled } from '@mui/system';
+import Grid from '@mui/material/Grid';
+import logo from '../images/logo.png'
 
-export const Navbar = () => {
+const CustomTypo = styled(Typography)({
+  fontFamily: '"Protest Riot", sans-serif',
+  fontWeight: 400,
+  fontStyle: 'normal',
+});
+
+const SearchBox = styled(TextField)(() => ({
+  '& fieldset': {
+    borderRadius: '25px',
+    height: '50px'
+  },
+}));
+
+export const Navbar = (props) => {
   const navigate = useNavigate();
   const user = getUserDataFromLocalStorage();
   const theme = useTheme();
@@ -39,8 +58,9 @@ export const Navbar = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  const mobile = width < 500;
-  const navbarWidth = width < 600;
+  const mobile = width < 868;
+  const navbarWidth = width < 868;
+  const logoVisible = width < 600;
 
   const updateDimensions = () => {
     const width = window.innerWidth;
@@ -78,9 +98,9 @@ export const Navbar = () => {
   }
       
   return (
-    <Stack mb={2}>
+    <Stack mb={2} ml={4} mr={4}>
   
-      <Stack
+      <Stack 
         direction="row"
         alignItems="center"
         justifyContent="space-between"
@@ -91,32 +111,40 @@ export const Navbar = () => {
         spacing={!mobile ? 2 : 0}
       >
 
-        <HorizontalStack>
-          <AiFillFileText
-            size={35}
-            color={theme.palette.primary.main}
-            onClick={() => navigate("/")}
+        <HorizontalStack onClick={() => navigate("/")}>
+          <img
+            src={logo}
+            alt="logo"
+            height={45}
+            width={45}
           />
-          <Typography
-            sx={{ display: mobile ? "none" : "block" }}
+
+          <CustomTypo
+            sx={{ display: logoVisible ? "none" : "block"  } }
             variant={navbarWidth ? "h5" : "h4"}
             mr={1}
             color={theme.palette.primary.main}
+            className="vast-shadow-regular" 
           >
               Discussify
-          </Typography>
+          </CustomTypo>
         </HorizontalStack>
 
         {!navbarWidth && (
-          <Box component="form" onSubmit={handleSubmit}>
-            <TextField
-              size="small"
-              label="Search for posts..."
-              sx={{ flexGrow: 1, maxWidth: 300 }}
-              onChange={handleChange}
-              value={search}
-            />
-          </Box>
+          <Grid container alignItems="center" justifyContent="center">
+            <Grid item xs={12} sm={9}>
+                <Box component="form" onSubmit={handleSubmit} >
+                  <SearchBox
+                    size="small"
+                    label="Search for posts"
+                    sx={{ flexGrow: 1}}
+                    onChange={handleChange}
+                    value={search}
+                    fullWidth
+                  />
+                </Box>
+            </Grid>
+          </Grid>
         )}
 
         <HorizontalStack>
@@ -125,6 +153,12 @@ export const Navbar = () => {
               <AiOutlineSearch />
             </IconButton>
           )}
+
+          <IconButton 
+          onClick={props.toggleTheme}
+          >
+          {props.isDarkTheme ? <FaSun /> : <FaMoon />}
+          </IconButton>
 
           <IconButton component={Link} to={"/"}>
             <AiFillHome />
@@ -142,10 +176,10 @@ export const Navbar = () => {
             </>
           ) : (
             <>
-              <Button variant="text" sx={{ minWidth: 80 }} href="/signup">
+              <Button variant="text" sx={{ minWidth: 85 }} href="/signup">
                 Sign Up
               </Button>
-              <Button variant="text" sx={{ minWidth: 65 }} href="/login">
+              <Button variant="text" sx={{ minWidth: 85 }} href="/login">
                 Login
               </Button>
             </>
@@ -156,9 +190,9 @@ export const Navbar = () => {
 
       {navbarWidth && searchIcon && (
         <Box component="form" onSubmit={handleSubmit} mt={2}>
-          <TextField
+          <SearchBox
             size="small"
-            label="Search for posts..."
+            label="Search for posts"
             fullWidth
             onChange={handleChange}
             value={search}

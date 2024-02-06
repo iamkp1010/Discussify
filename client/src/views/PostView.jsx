@@ -1,6 +1,5 @@
 import { Container, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { GoBack } from "../components/GoBack";
 import { GridLayout } from "../components/GridLayout";
 import { Loading } from "../components/Loading";
 import { Navbar } from "../components/Navbar";
@@ -10,10 +9,10 @@ import { useParams } from "react-router-dom";
 import { ErrorAlert } from "../components/ErrorAlert";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import { fetchPostsApi } from "../apis/postsApi";
+import {Comments} from "../components/Comments";
 
 export const PostView = () => {
   const params = useParams();
-
   const [post, setPost] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -32,12 +31,10 @@ export const PostView = () => {
 
   useEffect(() => {
     fetchPost();
-  }, []);
+  }, [params.id]);
 
   return (
     <Container>
-      <Navbar />
-      <GoBack />
       <GridLayout
         left={
           loading ? (
@@ -45,8 +42,7 @@ export const PostView = () => {
           ) : post ? (
             <Stack spacing={2}>
               <PostCard post={post} key={post._id} />
-
-              {/* <Comments /> */}
+              <Comments />
             </Stack>
           ) : (
             error && <ErrorAlert error={error} />

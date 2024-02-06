@@ -4,8 +4,6 @@ const UserModel = require("../models/users.model");
 const verifyToken = async (req, res, next) => {
   try {
     const token = req?.cookies?.accessToken;
-
-    console.log("TOKEN IS VERIFYING");
     if (!token) throw new Error("No token provided");
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);

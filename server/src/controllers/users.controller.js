@@ -110,15 +110,13 @@ async function login(req, res){
         await existingUser.save()
 
         const loggedUser = await UserModel.findById(existingUser._id).select("-password -refreshToken")
-
-        console.log(accessCookieExpire)
         return res.status(200)
                   .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'Lax', secure: true, expires: accessCookieExpire})
                   .cookie("refreshToken", refreshToken, {httpOnly: true, sameSite: 'Strict', secure: true, path: '/api/users/tokenRefresh'})
                   .json({user: loggedUser})
     }
     catch(err){
-        console.log(err.message);
+        console.log(err)
         res.status(400).json({error: err.message});
     }
 }
@@ -152,10 +150,48 @@ async function fetchUserInfo(req, res){
         res.status(200).json(userInfo)
 
     }catch(err){
-        console.log(err.message);
+        console.log(err)
         res.status(400).json({error: err.message});
     }
+    
+}
 
+async function updateUser(req, res){
+    
+    try{
+        const biography = req.body.biography
+        const user = req.user
+        const updatedUser = await UserModel.findOneAndUpdate({_id: user._id}, {biography}, { new: true }).select("-password -refreshToken");
+        res.status(200).json({updatedUser})
+
+    }catch(err){
+        console.log(err);
+        res.status(400).json({error: err.message});
+    }
+}
+
+async function fetchRandomUsers(req, res){
+    try{
+        let size = Number(req.query.size)
+        if(!size) size = 5;
+        const users = await UserModel.aggregate([
+            { 
+                $sample: {
+                    size: size 
+                } 
+            },
+            {
+                $project: {
+                    username: 1
+                }
+            }
+        ])
+        res.status(200).json(users)
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({error: err})
+    }
 }
 
 module.exports = {
@@ -164,5 +200,7 @@ module.exports = {
     login,
     loginWithGoogle,
     protected,
-    fetchUserInfo
+    fetchUserInfo,
+    fetchRandomUsers,
+    updateUser
 }

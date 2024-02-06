@@ -15,15 +15,11 @@ API.interceptors.response.use(
             }
             catch(e){
                 removeUserDataFromLocalStorage()
-                e.status = e?.response?.status
-                return e
+                window.location.href = '/login';
+                return {status: e?.response?.status, error: (err?.response?.data?.error || err.message) }
             }
         }
-        else {
-            if(!err.response) err.response = {error:err.message}
-            return err.response
-        }
+        else return {error: (err?.response?.data?.error || err.message)}
     }
 )
-
 export default API

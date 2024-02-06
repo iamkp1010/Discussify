@@ -1,4 +1,4 @@
-import { Button, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, CssBaseline, Stack, ThemeProvider, Typography, createTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +11,11 @@ import {DarkTextField} from "../components/DarkTextField"
 import useTheme from '@mui/system/useTheme';
 import { GoogleButton } from "../components/GoogleButton";
 import { loginApi } from "../apis/usersApi";
+import theme from "../theme";
 
 export const LoginView = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
+  const themeconfig = useTheme();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,7 +33,7 @@ export const LoginView = () => {
     e.preventDefault();
 
     try{
-      const {data} = await loginApi(formData);
+      const data = await loginApi(formData);
       if (data.error) {
         setServerError(data.error);
       } else {
@@ -46,6 +47,8 @@ export const LoginView = () => {
   };
 
   return (
+    <ThemeProvider theme={theme('light')}>
+    <CssBaseline />
     <Container maxWidth="sm" sx={{ mt: 20}}>
       <Stack alignItems="center">
         <Typography sx={{ typography: { sm: 'h2', xs: 'h3' } }} gutterBottom>
@@ -56,7 +59,7 @@ export const LoginView = () => {
         </Typography>
         <Box component="form" onSubmit={handleSubmit}
           sx={{ 
-              [theme.breakpoints.up('xs')]: {
+              [themeconfig.breakpoints.up('xs')]: {
                 width: '97%',
               },
            }}
@@ -96,6 +99,7 @@ export const LoginView = () => {
           
       </Stack>
     </Container>
+    </ThemeProvider>
   );
 };
 

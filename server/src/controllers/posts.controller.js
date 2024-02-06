@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const PostModel = require("../models/posts.model");
 const VotesModel = require("../models/votes.model");
 const UserModel = require("../models/users.model");
+const CommentModel = require("../models/comments.model");
 
 async function createPost(req, res) {
   try {
@@ -30,7 +31,6 @@ async function createPost(req, res) {
 */
 
 async function fetchPosts(req, res) {
-  console.log("In Fetch Posts");
   try {
     const loggedUser = req.user;
     let { pageNumber, sortBy, search, postId, author, pageSize } = req.query;
@@ -127,6 +127,7 @@ async function fetchPosts(req, res) {
           const postVote = await VotesModel.findOne({
             postId: post._id,
             userId: loggedUserId,
+            isPost: true
           });
 
           if (postVote) {
@@ -139,7 +140,7 @@ async function fetchPosts(req, res) {
 
     res.status(200).json(posts);
   } catch (err) {
-    console.log(err.message);
+    console.log(err)
     res.status(400).json({ error: err.message });
   }
 }
@@ -157,8 +158,7 @@ async function deletePost(req, res) {
     if (!postDoc) throw new Error("Post does not exist!")
 
     await PostModel.deleteOne({ _id: postId }).session(mongoSession);
-
-    // const deletedComments = await CommentModel.deleteOne({postId}).session(mongoSession)
+    await CommentModel.deleteMany({postId}).session(mongoSession)
     await mongoSession.commitTransaction();
     mongoSession.endSession();
     res.status(200).json({msg: "Post deleted successfully"})
@@ -166,13 +166,12 @@ async function deletePost(req, res) {
   }catch(err){
     await mongoSession.abortTransaction();
     mongoSession.endSession();
-    console.log(err.message);
+    console.log(err)
     res.status(400).json({ error: err.message });
   }
 
 }
 
-//update post
 async function updatePost(req, res) {
   try{
     const postId = req.params.id;
@@ -189,19 +188,18 @@ async function updatePost(req, res) {
     res.status(200).json({msg: "Post updated successfully"})
 
   }catch(err){
-    console.log(err.message);
+    console.log(err)
     res.status(400).json({ error: err.message });
   }
 }
 
-//upvote, downvote post
-// testing remaining using frontend
 async function votePost(req, res){
   const mongoSession = await mongoose.startSession();
   try{
     mongoSession.startTransaction();
     const postId = req.params.id
-    const {userId, isUpvoted} = req.body
+    const {isUpvoted} = req.body
+    const userId = req.user._id
 
     if(!mongoose.Types.ObjectId.isValid(userId)) throw new Error("UserId is not valid!")
     const userDoc = await UserModel.findById(userId);
@@ -211,15 +209,15 @@ async function votePost(req, res){
     const postDoc = await PostModel.findById(postId);
     if(!postDoc) throw new Error("Post does not exist!");
 
-    const oldVoteDoc = await VotesModel.findOne({ postId, userId }).session(mongoSession)
+    const oldVoteDoc = await VotesModel.findOne({ postId, userId, isPost: true }).session(mongoSession)
 
     if(!oldVoteDoc) {
-        await VotesModel.create([{userId, postId, isUpvoted}], { session: mongoSession });
+        await VotesModel.create([{userId, postId, isUpvoted, isPost: true}], { session: mongoSession });
         await PostModel.findByIdAndUpdate({_id:postId},{ $inc: { voteCount: (isUpvoted ? 1 : -1) } }).session(mongoSession)
     }
     else{
-      isUpvoted === oldVoteDoc.isUpvoted ? await VotesModel.deleteOne({ postId, userId }).session(mongoSession) && await PostModel.findByIdAndUpdate({_id:postId},{ $inc: { voteCount: (isUpvoted ? -1 : 1) } }).session(mongoSession)
-      : await VotesModel.updateOne({postId, userId}, {isUpvoted}).session(mongoSession) && await PostModel.findByIdAndUpdate({_id:postId},{ $inc: { voteCount: (isUpvoted ? 2 : -2) } }).session(mongoSession)
+      isUpvoted === oldVoteDoc.isUpvoted ? await VotesModel.deleteOne({ postId, userId, isPost: true}).session(mongoSession) && await PostModel.findByIdAndUpdate({_id:postId},{ $inc: { voteCount: (isUpvoted ? -1 : 1) } }).session(mongoSession)
+      : await VotesModel.updateOne({postId, userId, isPost: true}, {isUpvoted}).session(mongoSession) && await PostModel.findByIdAndUpdate({_id:postId},{ $inc: { voteCount: (isUpvoted ? 2 : -2) } }).session(mongoSession)
     }
     await mongoSession.commitTransaction();
     mongoSession.endSession();
@@ -252,6 +250,7 @@ async function fetchVotedPost(req, res){
       {
         $match: {
           userId: new mongoose.Types.ObjectId(userId),
+          isPost: true,
           isUpvoted
         },
       },
@@ -283,6 +282,30 @@ async function fetchVotedPost(req, res){
       },
       {
         $limit: 10,
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "userDoc"
+        }
+      },
+      {
+        $unwind:{
+          path: "$userDoc",
+        }
+      },
+      {
+        $addFields: {
+          username: "$userDoc.username",
+          userId: "userDoc._id"
+        }
+      },
+      {
+        $project: {
+          "userDoc": 0
+        }
       }
     ])
 
@@ -297,6 +320,7 @@ async function fetchVotedPost(req, res){
           const postVote = await VotesModel.findOne({
             postId: post._id,
             userId: loggedUserId,
+            isPost: true
           });
 
           if (postVote) {

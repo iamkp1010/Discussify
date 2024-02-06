@@ -9,7 +9,7 @@ export const GoogleButton = () => {
   const navigate = useNavigate();
   const handleGoogleLoginSuccess = async(code) => {
     try{
-        const {data} = await loginWithGoogleApi(code);
+        const data = await loginWithGoogleApi(code);
         if (data) {
           setUserDataToLocalStorage(data.user);
           navigate("/");

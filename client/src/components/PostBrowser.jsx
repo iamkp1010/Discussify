@@ -18,6 +18,7 @@ export const PostBrowser = (props) => {
   const [sortBy, setSortBy] = useState("-createdAt");
   const [count, setCount] = useState(0);
   const user = getUserDataFromLocalStorage();
+  const [effect, setEffect] = useState(false);
 
   const [search] = useSearchParams();
 
@@ -44,7 +45,6 @@ export const PostBrowser = (props) => {
       data = await fetchVotedPostApi(query);
     }
 
-
     if (data?.length < 10) {
       setEnd(true);
     }
@@ -58,15 +58,15 @@ export const PostBrowser = (props) => {
 
   useEffect(() => {
     fetchPosts();
-  }, [sortBy]);
-
+  }, [sortBy, effect]);
+  
   useEffect(() => {
     setPosts([]);
     setPage(0);
     setEnd(false);
-    fetchPosts();
-  }, [search]);
-
+    setEffect(!effect)
+  }, [search, props.profileUser]);
+  
   const handleSortBy = (e) => {
     const newSortName = e.target.value;
     let newSortBy;

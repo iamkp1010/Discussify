@@ -37,7 +37,7 @@ async function refresh(req,res){
                   .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'Lax', secure: true, expires: accessCookieExpire})
                   .json({msg:"AccessToken is refreshed"});
     } catch (err) {
-        console.log(err.message);
+        console.log(err)
         res.status(403).json({error: err.message});
     }
 }

@@ -1,4 +1,4 @@
-import { Button, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, CssBaseline, Stack, ThemeProvider, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 import { Box } from "@mui/system";
@@ -12,12 +12,13 @@ import Divider from "@mui/material/Divider";
 import useTheme from "@mui/system/useTheme";
 import { GoogleButton } from "../components/GoogleButton";
 import { registerApi } from "../apis/usersApi";
+import theme from "../theme";
 
 export const SignupView = () => {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState("");
   const [errors, setErrors] = useState({});
-  const theme = useTheme();
+  const themeConfig = useTheme();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -36,7 +37,7 @@ export const SignupView = () => {
     if (Object.keys(errors).length !== 0) return;
     
     try{
-      const {data} = await registerApi(formData);
+      const data = await registerApi(formData);
       if (data.error) {
         setServerError(data.error);
       } else {
@@ -74,6 +75,8 @@ export const SignupView = () => {
   };
 
   return (
+    <ThemeProvider theme={theme('light')}>
+    <CssBaseline />
     <Container maxWidth="sm" sx={{ mt: 20 }}>
       <Stack alignItems="center">
         <Typography sx={{ typography: { sm: "h2", xs: "h3" } }} gutterBottom>
@@ -86,7 +89,7 @@ export const SignupView = () => {
           component="form"
           onSubmit={handleSubmit}
           sx={{
-            [theme.breakpoints.up("xs")]: {
+            [themeConfig.breakpoints.up("xs")]: {
               width: "97%",
             },
           }}
@@ -155,5 +158,6 @@ export const SignupView = () => {
         </Box>
       </Stack>
     </Container>
+    </ThemeProvider>
   );
 };

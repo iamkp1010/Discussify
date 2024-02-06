@@ -8,7 +8,6 @@ import {Sidebar} from "../components/Sidebar";
 export const SearchView = () => {
   return (
     <Container>
-      <Navbar />
       <GridLayout
         left={
           <Stack spacing={2}>

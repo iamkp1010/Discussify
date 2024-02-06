@@ -36,13 +36,11 @@ export const PostEditor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const {data} = await createPostApi(formData);
+    const data = await createPostApi(formData);
     setLoading(false);
     if (data && data.error) {
       setServerError(data.error);
     } else {
-      console.log(data?.post?._id);
-      console.log("::::::");
       navigate("/posts/" + data?.post?._id);
     }
   };
@@ -64,12 +62,6 @@ export const PostEditor = () => {
             </Typography>
           </HorizontalStack>
         )}
-
-        <Typography>
-          <a href="https://commonmark.org/help/" target="_blank">
-            Markdown Help
-          </a>
-        </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>
           <TextField

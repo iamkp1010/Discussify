@@ -1,12 +1,9 @@
 import { Card, Container, Stack, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-// import { getUser, updateUser } from "../../api/users";
-// import {CommentBrowser} from "../CommentBrowser";
-
+import {CommentBrowser} from "../components/CommentBrowser";
 import {ErrorAlert} from "../components/ErrorAlert";
 import {FindUsers} from "../components/FindUsers";
-import {GoBack} from "../components/GoBack";
 import {GridLayout} from "../components/GridLayout";
 import {Loading} from "../components/Loading";
 // import{ MobileProfile} from "../components/MobileProfile";
@@ -15,7 +12,7 @@ import {PostBrowser} from "../components/PostBrowser";
 import {Profile} from "../components/Profile";
 import {ProfileTabs} from "../components/ProfileTabs";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
-import { fetchUserInfoApi } from "../apis/usersApi";
+import { fetchUserInfoApi, updateUserApi } from "../apis/usersApi";
 
 export const ProfileView = () => {
   const [loading, setLoading] = useState(true);
@@ -45,10 +42,8 @@ export const ProfileView = () => {
     e.preventDefault();
 
     const content = e.target.content.value;
-
-    // await updateUser(user, { biography: content });
-
-    setProfile({ ...profile, user: { ...profile.user, biography: content } });
+    await updateUserApi({ biography: content });
+    setProfile({ ...profile,biography: content });
     setEditing(false);
   };
 
@@ -91,14 +86,12 @@ export const ProfileView = () => {
           key="liked"
         />
       ),
-    //   comments: <CommentBrowser profileUser={profile} />,
+      comments: <CommentBrowser profileUser={profile} />,
     };
   }
 
   return (
     <Container>
-      <Navbar />
-
       <GridLayout
         left={
           <>

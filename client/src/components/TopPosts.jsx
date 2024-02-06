@@ -1,6 +1,5 @@
 import { Card, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import {Loading} from "./Loading";
 import {PostCard} from "./PostCard";
 import {HorizontalStack} from "./HorizontalStack";
@@ -11,10 +10,9 @@ import { fetchPostsApi } from "../apis/postsApi";
 export const TopPosts = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState(null);
-  const user = getUserDataFromLocalStorage();
 
   const fetchPosts = async () => {
-    const query = { sortBy: "-voteCount", pageSize: 3};
+    const query = { sortBy: "-voteCount", pageSize: 4};
     let data
     data = await fetchPostsApi(query);
     if(data && !data.error) setPosts(data);

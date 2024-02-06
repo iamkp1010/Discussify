@@ -6,17 +6,25 @@ import { useNavigate } from "react-router-dom";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import { ContentDetails } from "./ContentDetails";
 
-import { LikeBox } from "./LikeBox";
+import { VoteBox } from "./VoteBox";
 import { PostContentBox } from "./PostContentBox";
 import { HorizontalStack } from "./HorizontalStack";
 import { ContentUpdateEditor } from "./ContentUpdateEditor";
 import { Markdown } from "./Markdown";
 
-import "./postCard.css";
 import { MdCancel } from "react-icons/md";
 import { BiTrash } from "react-icons/bi";
 import { UserLikePreview } from "./UserLikePreview";
 import { deletePostApi, updatePostApi } from "../apis/postsApi";
+import styled from "@emotion/styled";
+
+const CustomCard = styled(Card)(({ theme }) => ({
+  transition: "transform 0.3s",
+  "&:hover": {
+    transform: "scale(1.01)",
+    borderColor: theme.palette.primary.main,
+  },
+}));
 
 export const PostCard = (props) => {
   const { preview, removePost } = props;
@@ -25,14 +33,13 @@ export const PostCard = (props) => {
   const navigate = useNavigate();
   const user = getUserDataFromLocalStorage();
   const isAuthor = user && user.username === postData.username;
-
+  const isDarkTheme = localStorage.getItem("isDarkTheme") === "true"
   const theme = useTheme();
   const iconColor = theme.palette.primary.main;
 
   const [editing, setEditing] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [post, setPost] = useState(postData);
-  const [voteCount, setvoteCount] = useState(post?.voteCount ? post.voteCount : 0);
 
   let maxHeight = null;
   if (preview === "primary") {
@@ -71,18 +78,9 @@ export const PostCard = (props) => {
     setEditing(false);
   };
 
-  const handleVote = async (voted) => {
-    if (voted) {
-      setvoteCount(voteCount + 1);
-      // api call
-    } else {
-      setvoteCount(voteCount - 1);
-      // api call
-    }
-  };
 
   return (
-    <Card sx={{ padding: 0 }} className="post-card">
+    <CustomCard sx={{ padding: 0 }} >
       <Box className={preview}>
         <HorizontalStack spacing={0} alignItems="initial">
           <Stack
@@ -90,15 +88,13 @@ export const PostCard = (props) => {
             alignItems="center"
             spacing={1}
             sx={{
-              backgroundColor: "grey.100",
+              backgroundColor: isDarkTheme? "#28282B": "grey.100",
               width: "50px",
               padding: theme.spacing(1),
             }}
           >
-            <LikeBox
-              voteCount={voteCount}
-              voted={post.isUpvoted}
-              onVote={handleVote}
+            <VoteBox
+              post = {post}
             />
           </Stack>
         <PostContentBox clickable={preview} post={post} editing={editing}>
@@ -187,6 +183,6 @@ export const PostCard = (props) => {
           </PostContentBox>
         </HorizontalStack>
       </Box>
-    </Card>
+    </CustomCard>
   );
 };

@@ -46,7 +46,7 @@ async function loginWithGoogle(req,res){
 
         return res.status(200)
                   .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'None', secure: true, expires: accessCookieExpire})
-                  .cookie("refreshToken", refreshToken, {httpOnly: true, sameSite: 'Strict', secure: true, path: '/api/users/tokenRefresh'})
+                  .cookie("refreshToken", refreshToken, {httpOnly: true, sameSite: 'None', secure: true, path: '/api/users/tokenRefresh'})
                   .json({user: loggedUser})
     }
     catch(err){
@@ -112,7 +112,7 @@ async function login(req, res){
         const loggedUser = await UserModel.findById(existingUser._id).select("-password -refreshToken")
         return res.status(200)
                   .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'None', secure: true, expires: accessCookieExpire})
-                  .cookie("refreshToken", refreshToken, {httpOnly: true, sameSite: 'Strict', secure: true, path: '/api/users/tokenRefresh'})
+                  .cookie("refreshToken", refreshToken, {httpOnly: true, sameSite: 'None', secure: true, path: '/api/users/tokenRefresh'})
                   .json({user: loggedUser})
     }
     catch(err){
@@ -130,7 +130,7 @@ async function logout(req,res){
     )
     return res.status(200)
               .clearCookie("accessToken", {httpOnly: true, sameSite: 'None', secure: true})
-              .clearCookie("refreshToken", {httpOnly: true, sameSite: 'Strict', secure: true, path: '/api/users/tokenRefresh'})
+              .clearCookie("refreshToken", {httpOnly: true, sameSite: 'None', secure: true, path: '/api/users/tokenRefresh'})
               .json({msg: "User logged out"});
 }
 

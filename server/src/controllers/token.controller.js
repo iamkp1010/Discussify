@@ -34,7 +34,7 @@ async function refresh(req,res){
         accessCookieExpire.setTime(accessCookieExpire.getTime() + 60 * 60 * 1000);
 
         return res.status(200)
-                  .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'Lax', secure: true, expires: accessCookieExpire})
+                  .cookie("accessToken", accessToken, {httpOnly: true, sameSite: 'None', secure: true, expires: accessCookieExpire})
                   .json({msg:"AccessToken is refreshed"});
     } catch (err) {
         console.log(err)

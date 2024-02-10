@@ -78,15 +78,6 @@ export const Profile = (props) => {
               Message
             </Button>
           )}
-
-          <HorizontalStack>
-            <Typography color="text.secondary">
-              Likes <b>{props.profile.posts.likeCount}</b>
-            </Typography>
-            <Typography color="text.secondary">
-              Posts <b>{props.profile.posts.count}</b>
-            </Typography>
-          </HorizontalStack>
         </Stack>
       ) : (
         <Loading label="Loading profile" />

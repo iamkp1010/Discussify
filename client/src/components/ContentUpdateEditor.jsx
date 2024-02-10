@@ -4,6 +4,7 @@ import React, { useState } from "react";
 export const ContentUpdateEditor = (props) => {
   const [content, setContent] = useState(props.originalContent);
   const [error, setError] = useState("");
+  const isDarkTheme = localStorage.getItem("isDarkTheme") === "true"
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -34,7 +35,7 @@ export const ContentUpdateEditor = (props) => {
           fullWidth
           margin="normal"
           name="content"
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: isDarkTheme? "#121212" : "white" }}
           onChange={handleChange}
           error={error.length !== 0}
           helperText={error}
@@ -43,7 +44,7 @@ export const ContentUpdateEditor = (props) => {
         <Button
           type="submit"
           variant="outlined"
-          sx={{ backgroundColor: "white", mt: 1 }}
+          sx={{ backgroundColor: isDarkTheme? "#121212" : "white", mt: 1 }}
         >
           Update
         </Button>

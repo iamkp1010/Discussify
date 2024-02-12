@@ -15,7 +15,7 @@ import { MdCancel } from "react-icons/md";
 import { BiDownvote, BiReply, BiSolidDownvote, BiSolidUpvote, BiTrash, BiUpvote } from "react-icons/bi";
 import { BsReply, BsReplyFill } from "react-icons/bs";
 import Moment from "react-moment";
-import { deleteCommentApi, updateCommentApi, voteCommentApi } from "../apis/commentApi";
+import { deleteCommentApi, updateCommentApi, voteCommentApi } from "../services/commentService";
 import { IconContext } from "react-icons/lib";
 
 export const Comment = (props) => {

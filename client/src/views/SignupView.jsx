@@ -11,7 +11,7 @@ import { DarkTextField } from "../components/DarkTextField";
 import Divider from "@mui/material/Divider";
 import useTheme from "@mui/system/useTheme";
 import { GoogleButton } from "../components/GoogleButton";
-import { registerApi } from "../apis/usersApi";
+import { registerApi } from "../services/authService";
 import theme from "../theme";
 
 export const SignupView = () => {

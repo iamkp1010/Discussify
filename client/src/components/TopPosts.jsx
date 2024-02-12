@@ -4,7 +4,7 @@ import {PostCard} from "./PostCard";
 import {HorizontalStack} from "./HorizontalStack";
 import "react-icons/md";
 import { MdLeaderboard } from "react-icons/md";
-import { fetchPostsApi } from "../apis/postsApi";
+import { fetchPostsApi } from "../services/postService";
 
 export const TopPosts = () => {
   const [loading, setLoading] = useState(true);

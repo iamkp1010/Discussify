@@ -7,7 +7,7 @@ import {CreatePost} from "./CreatePost";
 import {PostCard} from "./PostCard";
 import {SortBySelect} from "./SortBySelect";
 import {HorizontalStack} from "./HorizontalStack";
-import { fetchPostsApi, fetchVotedPostApi } from "../apis/postsApi";
+import { fetchPostsApi, fetchVotedPostApi } from "../services/postService";
 
 export const PostBrowser = (props) => {
   const [posts, setPosts] = useState([]);
@@ -40,7 +40,7 @@ export const PostBrowser = (props) => {
       if (props.profileUser) query.author = props.profileUser._id;
       if (searchExists) query.search = search.get("search");
       data = await fetchPostsApi(query);
-    } else if (props.contentType === "liked") {
+    } else if (props.contentType === "votes") {
       query.userId = props.profileUser._id
       data = await fetchVotedPostApi(query);
     }
@@ -99,7 +99,7 @@ export const PostBrowser = (props) => {
       "-commentCount": "Comments",
       "createdAt": "Earliest",
     },
-    liked: {
+    votes: {
       "-createdAt": "Latest",
       "createdAt": "Earliest",
     },

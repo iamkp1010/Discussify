@@ -9,7 +9,7 @@ API.interceptors.response.use(
     async (err) => {
         if(err.response?.status === 401){
             try{
-                const axiosInstance = await axios.create({baseURL:`${BACKEND_URL}/users`, withCredentials: true}) 
+                const axiosInstance = await axios.create({baseURL:`${BACKEND_URL}/auth`, withCredentials: true}) 
                 await axiosInstance.post("/tokenRefresh");
                 return API.request(err.config)
             }

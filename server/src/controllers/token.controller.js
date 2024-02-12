@@ -18,6 +18,7 @@ async function generateRefreshToken(user){
 }
 
 async function refresh(req,res){
+    console.log("!@@!)@!!)@)@!@!()@!()@!()@!()!@()!@()(@!)(!@)(@!)(@!(")
     try {
         if(!req.cookies) throw new Error("No cookies in request");
         const incomingRefreshToken = req.cookies['refreshToken'];

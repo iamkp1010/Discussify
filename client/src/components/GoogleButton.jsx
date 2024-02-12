@@ -1,6 +1,6 @@
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
-import { loginWithGoogleApi } from "../apis/usersApi";
+import { loginWithGoogleApi } from "../services/authService";
 import { Button } from "@mui/material";
 import { setUserDataToLocalStorage } from "../helpers/authHelper";
 import { useNavigate } from "react-router-dom";

@@ -12,7 +12,7 @@ import { ErrorAlert } from "./ErrorAlert";
   import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import { HorizontalStack } from "./HorizontalStack";
 import { UserAvatar } from "./UserAvatar";
-import { createPostApi } from "../apis/postsApi";
+import { createPostApi } from "../services/postService";
 
 export const PostEditor = () => {
   const navigate = useNavigate();

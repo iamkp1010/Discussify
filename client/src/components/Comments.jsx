@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Comment } from "./Comment";
 import { useParams } from "react-router-dom";
 import { CommentEditor } from "./CommentEditor";
-import { fetchPostCommentsApi } from "../apis/commentApi";
+import { fetchPostCommentsApi } from "../services/commentService";
 
 export const Comments = () => {
   const [comments, setComments] = useState(null);

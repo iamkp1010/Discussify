@@ -11,7 +11,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { MdRefresh } from "react-icons/md";
 import {HorizontalStack} from "./HorizontalStack";
 import {UserEntry} from "./UserEntry";
-import { fetchRandsomUserApi } from "../apis/usersApi";
+import { fetchRandsomUserApi } from "../services/userService";
 
 export const FindUsers = () => {
   const [loading, setLoading] = useState(true);

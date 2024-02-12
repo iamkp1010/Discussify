@@ -2,7 +2,7 @@ import { Button, Card, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {Comment} from "./Comment";
 import {SortBySelect} from "./SortBySelect";
-import { fetchUserCommentsApi } from "../apis/commentApi";
+import { fetchUserCommentsApi } from "../services/commentService";
 
 export const CommentBrowser = (props) => {
   const [comments, setComments] = useState([]);

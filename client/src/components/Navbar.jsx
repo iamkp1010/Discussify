@@ -21,7 +21,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getUserDataFromLocalStorage, removeUserDataFromLocalStorage } from "../helpers/authHelper";
 import {UserAvatar} from "./UserAvatar";
 import {HorizontalStack} from "./HorizontalStack";
-import { logoutApi, protectedApi } from "../apis/usersApi";
+import { logoutApi, protectedApi } from "../services/authService";
 import { FaSun } from "react-icons/fa6";
 import { FaMoon } from "react-icons/fa";
 import { styled } from '@mui/system';

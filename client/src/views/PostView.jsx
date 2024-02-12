@@ -6,7 +6,7 @@ import { Sidebar } from "../components/Sidebar";
 import { useParams } from "react-router-dom";
 import { ErrorAlert } from "../components/ErrorAlert";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
-import { fetchPostsApi } from "../apis/postsApi";
+import { fetchPostsApi } from "../services/postService";
 import {Comments} from "../components/Comments";
 
 export const PostView = () => {

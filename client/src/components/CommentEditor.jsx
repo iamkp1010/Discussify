@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import {ErrorAlert} from "./ErrorAlert";
 import { HorizontalStack } from "./HorizontalStack";
-import { createCommentApi } from "../apis/commentApi";
+import { createCommentApi } from "../services/commentService";
 
 export const CommentEditor = ({ label, comment, addComment, setReplying }) => {
   const [formData, setFormData] = useState({

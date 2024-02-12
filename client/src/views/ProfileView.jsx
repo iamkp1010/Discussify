@@ -9,7 +9,7 @@ import {PostBrowser} from "../components/PostBrowser";
 import {Profile} from "../components/Profile";
 import {ProfileTabs} from "../components/ProfileTabs";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
-import { fetchUserInfoApi, updateUserApi } from "../apis/usersApi";
+import { fetchUserInfoApi, updateUserApi } from "../services/userService";
 import { MobileProfile } from "../components/MobileProfile";
 
 export const ProfileView = () => {
@@ -77,11 +77,11 @@ export const ProfileView = () => {
           key="posts"
         />
       ),
-      liked: (
+      votes: (
         <PostBrowser
           profileUser={profile}
-          contentType="liked"
-          key="liked"
+          contentType="votes"
+          key="votes"
         />
       ),
       comments: <CommentBrowser profileUser={profile} />,

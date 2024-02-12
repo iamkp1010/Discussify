@@ -14,7 +14,7 @@ import { Markdown } from "./Markdown";
 
 import { MdCancel } from "react-icons/md";
 import { BiTrash } from "react-icons/bi";
-import { deletePostApi, updatePostApi } from "../apis/postsApi";
+import { deletePostApi, updatePostApi } from "../services/postService";
 import styled from "@emotion/styled";
 
 const CustomCard = styled(Card)(({ theme }) => ({

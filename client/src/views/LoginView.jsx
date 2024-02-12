@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider';
 import {DarkTextField} from "../components/DarkTextField"
 import useTheme from '@mui/system/useTheme';
 import { GoogleButton } from "../components/GoogleButton";
-import { loginApi } from "../apis/usersApi";
+import { loginApi } from "../services/authService";
 import theme from "../theme";
 
 export const LoginView = () => {

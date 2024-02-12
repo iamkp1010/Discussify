@@ -4,7 +4,7 @@ import { IconContext } from "react-icons/lib";
 import { useNavigate } from "react-router-dom";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import { BiDownvote, BiSolidDownvote, BiSolidUpvote, BiUpvote } from "react-icons/bi";
-import { votePostApi } from "../apis/postsApi";
+import { votePostApi } from "../services/postService";
 
 export const VoteBox = (props) => {
   const {post} = props

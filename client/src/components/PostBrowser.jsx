@@ -1,4 +1,4 @@
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { Button, Card, Skeleton, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -6,7 +6,6 @@ import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import {CreatePost} from "./CreatePost";
 import {PostCard} from "./PostCard";
 import {SortBySelect} from "./SortBySelect";
-import {Loading} from "./Loading";
 import {HorizontalStack} from "./HorizontalStack";
 import { fetchPostsApi, fetchVotedPostApi } from "../apis/postsApi";
 
@@ -32,6 +31,7 @@ export const PostBrowser = (props) => {
 
     let query = {
       pageNumber: newPage,
+      pageSize: 8,
       sortBy,
     };
 
@@ -45,7 +45,7 @@ export const PostBrowser = (props) => {
       data = await fetchVotedPostApi(query);
     }
 
-    if (data?.length < 10) {
+    if (data?.length < 8) {
       setEnd(true);
     }
 
@@ -140,7 +140,9 @@ export const PostBrowser = (props) => {
           />
         ))}
 
-        {loading && <Loading />}
+        {loading && <> 
+          {Array(5).fill(1).map(()=> <Skeleton variant="rectangular" height="200px" width="100%" style={{marginTop:"20px"}}/>)}
+        </>}
         {end ? (
           <Stack py={5} alignItems="center">
             <Typography variant="h5" color="text.secondary" gutterBottom>
@@ -155,7 +157,7 @@ export const PostBrowser = (props) => {
             </Button>
           </Stack>
         ) : (
-          !loading &&
+          loading &&
           posts &&
           posts?.length > 0 && (
             <Stack pt={2} pb={6} alignItems="center" spacing={2}>

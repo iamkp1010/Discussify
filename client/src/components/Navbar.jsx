@@ -98,7 +98,7 @@ export const Navbar = (props) => {
   }
       
   return (
-    <Stack mb={2} ml={4} mr={4}>
+    <Stack mb={2} ml={!mobile? 4 : 0} mr={!mobile? 4 : 1}>
   
       <Stack 
         direction="row"
@@ -111,25 +111,26 @@ export const Navbar = (props) => {
         spacing={!mobile ? 2 : 0}
       >
 
-        <HorizontalStack onClick={() => navigate("/")}>
-          <img
-            src={logo}
-            alt="logo"
-            height={45}
-            width={45}
-          />
+        <Button onClick={() => navigate("/")} style={{ backgroundColor: 'transparent' }} disableRipple>
+          <HorizontalStack>
+            <img
+              src={logo}
+              alt="logo"
+              height={mobile? 35 :45}
+              width={mobile? 35: 45}
+            />
 
-          <CustomTypo
-            sx={{ display: logoVisible ? "none" : "block"  } }
-            variant={navbarWidth ? "h5" : "h4"}
-            mr={1}
-            color={theme.palette.primary.main}
-            className="vast-shadow-regular" 
-          >
-              Discussify
-          </CustomTypo>
-        </HorizontalStack>
-
+            <CustomTypo
+              sx={{ display: logoVisible ? "none" : "block"  } }
+              variant={navbarWidth ? "h5" : "h4"}
+              mr={1}
+              color={theme.palette.primary.main}
+              className="vast-shadow-regular" 
+            >
+                Discussify
+            </CustomTypo>
+          </HorizontalStack>
+        </Button>
         {!navbarWidth && (
           <Grid container alignItems="center" justifyContent="center">
             <Grid item xs={12} sm={9}>
@@ -147,9 +148,9 @@ export const Navbar = (props) => {
           </Grid>
         )}
 
-        <HorizontalStack>
+        <Stack direction="row" alignItems="center" spacing={mobile? 1 :2}>
           {mobile && (
-            <IconButton onClick={handleSearchIcon}>
+            <IconButton onClick={handleSearchIcon} style={{marginLeft: "10px"}}>
               <AiOutlineSearch />
             </IconButton>
           )}
@@ -184,7 +185,7 @@ export const Navbar = (props) => {
               </Button>
             </>
           )}
-        </HorizontalStack>
+        </Stack>
         
       </Stack>
 

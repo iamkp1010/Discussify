@@ -1,11 +1,10 @@
-import { Stack, Typography } from "@mui/material";
+import { CircularProgress, Skeleton, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { Comment } from "./Comment";
-import { Loading } from "./Loading";
 import { useParams } from "react-router-dom";
 import { CommentEditor } from "./CommentEditor";
-import { fetchCommentsApi } from "../apis/commentApi";
+import { fetchPostCommentsApi } from "../apis/commentApi";
 
 export const Comments = () => {
   const [comments, setComments] = useState(null);
@@ -15,7 +14,7 @@ export const Comments = () => {
   const params = useParams();
 
   const fetchComments = async () => {
-    const data = await fetchCommentsApi(params);
+    const data = await fetchPostCommentsApi(params.id);
     if (data.error) {
       setError("Failed to fetch comments");
     } else {
@@ -34,7 +33,7 @@ export const Comments = () => {
       if (comment._id === id) {
         commentToFind = comment;
       } else {
-        for (let i = 0; i < comment.children.length; i++) {
+        for (let i = 0; i < comment.children?.length || 0; i++) {
           const commentToSearch = comment.children[i];
           recurse(commentToSearch, id);
         }
@@ -98,7 +97,7 @@ export const Comments = () => {
         label="What are your thoughts on this post?"
       />
 
-      {comments.length > 0 ? (
+      {comments?.length > 0 ? (
         <Box pb={4}>
           {comments.map((comment, i) => (
             <Comment
@@ -110,7 +109,12 @@ export const Comments = () => {
               depth={0}
             />
           ))}
-          {loading && <Loading />}
+          {loading && <>
+            <CircularProgress size={50} sx={{ my: 1 }} />
+              <Typography color="text.secondary" sx={{ mb: 3 }}>
+                Loading
+              </Typography>
+          </>}
         </Box>
       ) : (
         <Box
@@ -131,6 +135,9 @@ export const Comments = () => {
       )}
     </Stack>
   ) : (
-    <Loading label="Loading comments" />
+    <>
+      <Skeleton variant="rectangular" height="300px" width="100%" style={{marginTop:"20px"}}/>
+      {Array(5).fill(1).map(()=> <Skeleton variant="rectangular" height="135px" width="100%" style={{marginTop:"20px"}}/>)}
+    </>
   );
 };

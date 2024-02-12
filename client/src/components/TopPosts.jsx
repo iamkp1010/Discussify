@@ -1,6 +1,5 @@
-import { Card, Stack, Typography } from "@mui/material";
+import { Card, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {Loading} from "./Loading";
 import {PostCard} from "./PostCard";
 import {HorizontalStack} from "./HorizontalStack";
 import "react-icons/md";
@@ -37,7 +36,7 @@ export const TopPosts = () => {
           <PostCard preview="secondary" post={post} key={post._id} />
         ))
       ) : (
-        <Loading />
+        Array(4).fill(1).map(()=> <Skeleton variant="rectangular" height="170px" width="100%" style={{marginTop:"20px"}}/>)
       )}
     </Stack>
   );

@@ -29,18 +29,9 @@ function App() {
       <CssBaseline/>
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<ExploreView />} />
-          <Route path="/posts/:id" element={<PostView />} />
-          <Route path="/posts/create" element={<CreatePostView />}/>
-          <Route path="/messenger" element={<MessageView />}/>
-          <Route path="/search" element={<SearchView />} />
-          <Route path="/users/:id" element={<ProfileView />} /> */}
-          
           <Route path="/login" element={<LoginView />} />
           <Route path="/signup" element={<SignupView />} />
-          <Route
-          path="/*"
-          element={
+          <Route path="/*" element={
             <>
               <Navbar isDarkTheme={isDarkTheme} toggleTheme={toggleTheme}/>
               <Routes>

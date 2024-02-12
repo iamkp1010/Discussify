@@ -2,13 +2,13 @@ import {
   Card,
   Divider,
   IconButton,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { MdRefresh } from "react-icons/md";
-import {Loading} from "./Loading";
 import {HorizontalStack} from "./HorizontalStack";
 import {UserEntry} from "./UserEntry";
 import { fetchRandsomUserApi } from "../apis/usersApi";
@@ -52,7 +52,7 @@ export const FindUsers = () => {
 
         <Divider />
         {loading ? (
-          <Loading />
+          <Skeleton variant="rectangular" height="250px" width="100%" style={{marginTop:"20px"}}/>
         ) : (
           users?.length &&
           users.map((user) => (

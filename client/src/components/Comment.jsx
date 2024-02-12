@@ -2,7 +2,8 @@ import { Button, IconButton, Typography, useTheme } from "@mui/material";
 import { Box, compose } from "@mui/system";
 import React, { useState } from "react";
 import { AiFillEdit, AiOutlineLine, AiOutlinePlus } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink , useNavigate } from "react-router-dom";
+import Link from '@mui/material/Link';
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import {CommentEditor} from "./CommentEditor";
 import {ContentDetails} from "./ContentDetails";
@@ -134,7 +135,7 @@ export const Comment = (props) => {
         {props.profile ? (
           <Box>
             <Typography variant="h6">
-              <Link underline="hover" to={"/posts/" + comment.post._id}>
+              <Link component={RouterLink} underline="hover" to={"/posts/" + comment.post._id}>
                 {comment.post.title}
               </Link>
             </Typography>
@@ -204,9 +205,9 @@ export const Comment = (props) => {
         )}
 
         {!minimised && (
-          <Box sx={{ mt: 1 }} overflow="hidden">
+          <Box sx={{ mt: 1}} overflow="hidden">
             {!editing ? (
-              <Markdown content={comment.content} />
+              <div style={{paddingLeft:"10px"}}><Markdown content={comment.content}/></div>
             ) : (
               <ContentUpdateEditor
                 handleSubmit={handleSubmit}

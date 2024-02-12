@@ -36,10 +36,8 @@ async function fetchPosts(req, res) {
     let { pageNumber, sortBy, search, postId, author, pageSize } = req.query;
 
     if (!sortBy) sortBy = "-createdAt";
-    if (!pageNumber) pageNumber = 1;
-    else pageNumber = Number(pageNumber)
-    if (!pageSize) pageSize = 10
-    else pageSize = Number(pageSize)
+    pageNumber = !pageNumber? pageNumber = 1 : Number(pageNumber)
+    pageSize = !pageSize ? pageSize = 10 :Number(pageSize)
 
     const [sortField, sortOrder] =
       sortBy[0] === "-" ? [sortBy.slice(1), -1] : [sortBy, 1];

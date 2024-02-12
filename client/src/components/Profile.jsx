@@ -2,6 +2,7 @@ import { useTheme } from "@emotion/react";
 import {
   Button,
   Card,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -10,9 +11,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import {ContentUpdateEditor} from "./ContentUpdateEditor";
-import {Loading} from "./Loading";
 import {UserAvatar} from "./UserAvatar";
-import {HorizontalStack} from "./HorizontalStack";
 import styled from "@emotion/styled";
 
 const UsernameTypo = styled(Typography)({
@@ -38,23 +37,23 @@ export const Profile = (props) => {
       {user ? (
         <Stack alignItems="center" spacing={2}>
           <Box my={1}>
-            <UserAvatar width={150} height={150} username={user.username} />
+            <UserAvatar width={150} height={150} username={user?.username} />
           </Box>
 
-          <UsernameTypo variant="h5">{user.username}</UsernameTypo>
+          <UsernameTypo variant="h5">{user?.username}</UsernameTypo>
 
           {props.editing ? (
             <Box>
               <ContentUpdateEditor
                 handleSubmit={props.handleSubmit}
-                originalContent={user.biography}
+                originalContent={user?.biography}
                 validate={props.validate}
               />
             </Box>
-          ) : user.biography ? (
+          ) : user?.biography ? (
             <Typography textAlign="center" variant="p">
               <b>Bio: </b>
-              {user.biography}
+              {user?.biography}
             </Typography>
           ) : (
             <Typography variant="p">
@@ -62,7 +61,7 @@ export const Profile = (props) => {
             </Typography>
           )}
 
-          {currentUser && user._id === currentUser._id && (
+          {currentUser && user?._id === currentUser._id && (
             <Box>
               <Button
                 startIcon={<AiFillEdit color={iconColor} />}
@@ -73,14 +72,17 @@ export const Profile = (props) => {
             </Box>
           )}
 
-          {currentUser && user._id !== currentUser._id && (
+          {currentUser && user?._id !== currentUser._id && (
             <Button variant="outlined" onClick={props.handleMessage}>
               Message
             </Button>
           )}
         </Stack>
       ) : (
-        <Loading label="Loading profile" />
+          <div style={{marginLeft: "25%", marginRight: "25%"}}>
+          <Skeleton variant="circular" height="160px" width="100%" />
+          <Skeleton variant="rectangular" height="50px" width="105%" style={{marginTop: 20}} />
+          </div>
       )}
     </Card>
   );

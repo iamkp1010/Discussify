@@ -1,8 +1,6 @@
-import { Container, Stack } from "@mui/material";
+import { Container, Skeleton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { GridLayout } from "../components/GridLayout";
-import { Loading } from "../components/Loading";
-import { Navbar } from "../components/Navbar";
 import { PostCard } from "../components/PostCard";
 import { Sidebar } from "../components/Sidebar";
 import { useParams } from "react-router-dom";
@@ -38,7 +36,11 @@ export const PostView = () => {
       <GridLayout
         left={
           loading ? (
-            <Loading />
+            <>
+              <Skeleton variant="rectangular" height="200px" width="100%" style={{marginTop:"3px"}}/>
+              <Skeleton variant="rectangular" height="300px" width="100%" style={{marginTop:"20px"}}/>
+              {Array(5).fill(1).map(()=> <Skeleton variant="rectangular" height="150px" width="100%" style={{marginTop:"20px"}}/>)}
+            </>
           ) : post ? (
             <Stack spacing={2}>
               <PostCard post={post} key={post._id} />

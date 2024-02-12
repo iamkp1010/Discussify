@@ -1,18 +1,16 @@
-import { Card, Container, Stack, Tab, Tabs } from "@mui/material";
+import { Card, Container, Skeleton, Stack, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {CommentBrowser} from "../components/CommentBrowser";
 import {ErrorAlert} from "../components/ErrorAlert";
 import {FindUsers} from "../components/FindUsers";
 import {GridLayout} from "../components/GridLayout";
-import {Loading} from "../components/Loading";
-// import{ MobileProfile} from "../components/MobileProfile";
-import {Navbar} from "../components/Navbar";
 import {PostBrowser} from "../components/PostBrowser";
 import {Profile} from "../components/Profile";
 import {ProfileTabs} from "../components/ProfileTabs";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import { fetchUserInfoApi, updateUserApi } from "../apis/usersApi";
+import { MobileProfile } from "../components/MobileProfile";
 
 export const ProfileView = () => {
   const [loading, setLoading] = useState(true);
@@ -95,23 +93,26 @@ export const ProfileView = () => {
       <GridLayout
         left={
           <>
-            {/* <MobileProfile
+            <MobileProfile
               profile={profile}
               editing={editing}
               handleSubmit={handleSubmit}
               handleEditing={handleEditing}
               handleMessage={handleMessage}
               validate={validate}
-            /> */}
+            />
             <Stack spacin g={2}>
               {!error ? (profile ?(
                 <>
                   <ProfileTabs tab={tab} setTab={setTab} />
-
                   {tabs[tab]}
                 </>
-              ) : (
-                <Loading />
+              ) : ( 
+                <>
+                <Skeleton variant="rectangular" height="50px" width="100%" style={{marginTop:"20px"}}/>
+                <Skeleton variant="rectangular" height="70px" width="100%" style={{marginTop:"2px"}}/>
+                {Array(5).fill(1).map(()=> <Skeleton variant="rectangular" height="200px" width="100%" style={{marginTop:"20px"}}/>)}
+                </>
               )) : <ErrorAlert error={error} />}
             </Stack>
           </>

@@ -48,7 +48,7 @@ async function createComment(req, res) {
 async function fetchPostComments(req, res) {
   try {
     const loggedUser = req.user
-    const postId = req.query.id;
+    const postId = req.params.id;
 
     const postDoc = await PostModel.findById(postId);
     if (!postDoc) throw new Error("Post does not exist!");
@@ -129,6 +129,79 @@ async function fetchPostComments(req, res) {
     });
     res.status(200).json(finalCommmentsDoc);
   } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: err.message });
+  }
+}
+
+async function fetchUserComments(req, res){
+  try{
+    const userId = req.params.id
+    let {sortBy, pageNumber, pageSize} = req.query
+    const loggedUser = req.user
+
+    if (!sortBy) sortBy = "-createdAt";
+    pageNumber = !pageNumber? pageNumber = 1 : Number(pageNumber)
+    pageSize = !pageSize ? pageSize = 10 :Number(pageSize)
+
+    const [sortField, sortOrder] = sortBy[0] === "-" ? [sortBy.slice(1), -1] : [sortBy, 1];
+
+    let commentDoc = await CommentModel.aggregate([
+      {
+        $match: {
+          author: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $lookup: {
+          from: "posts",
+          localField: "postId",
+          foreignField: "_id",
+          as: "post",
+        },
+      },
+      {
+        $unwind: {
+          path: "$post",
+        },
+      },
+      {
+        $sort: {
+          [sortField]: sortOrder,
+        },
+      },
+      {
+        $skip: (pageNumber - 1) * pageSize,
+      },
+      {
+        $limit: pageSize,
+      }
+    ]);
+    
+    if(loggedUser) {
+      const loggedUserId = loggedUser._id;
+      if(!mongoose.Types.ObjectId.isValid(loggedUserId)) throw new Error("UserId is not valid!")
+      const userDoc = await UserModel.findById(loggedUserId);
+      if(!userDoc) throw new Error("loggedUser does not exist!")
+
+      commentDoc = await Promise.all(
+        commentDoc.map(async (comment) => {
+          const commentVote = await VotesModel.findOne({
+            commentId: comment._id,
+            userId: loggedUserId,
+            isPost: false
+          });
+
+          if (commentVote) {
+            comment.isUpvoted = commentVote.isUpvoted;
+          }
+          return comment;
+        })
+      );
+    }
+    res.status(200).json(commentDoc);
+  }
+  catch(err){
     console.log(err);
     res.status(400).json({ error: err.message });
   }
@@ -232,5 +305,6 @@ module.exports = {
   fetchPostComments,
   updateComment,
   deleteComment,
-  voteComment
+  voteComment,
+  fetchUserComments
 };

@@ -14,7 +14,6 @@ import { Markdown } from "./Markdown";
 
 import { MdCancel } from "react-icons/md";
 import { BiTrash } from "react-icons/bi";
-import { UserLikePreview } from "./UserLikePreview";
 import { deletePostApi, updatePostApi } from "../apis/postsApi";
 import styled from "@emotion/styled";
 
@@ -173,12 +172,6 @@ export const PostCard = (props) => {
                   {post.commentCount}
                 </Typography>
               </HorizontalStack>
-              <Box>
-                <UserLikePreview
-                  postId={post._id}
-                  userLikePreview={post.userLikePreview}
-                />
-              </Box>
             </HorizontalStack>
           </PostContentBox>
         </HorizontalStack>

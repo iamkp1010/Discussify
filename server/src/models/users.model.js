@@ -11,8 +11,6 @@ const validateUserName = (value) => {
     return usernameRegex.test(value);
 };
 
-//! private-public profile, followers folloing, birthday, social media links
-
 const userSchema = new mongoose.Schema({
     username: { 
         type: String, 
@@ -40,7 +38,7 @@ const userSchema = new mongoose.Schema({
             message: 'password is required'
         }
     },
-    profilePic: {               //TODO cloudinary
+    profilePic: {
         type: String,
         default: '',
     }, 

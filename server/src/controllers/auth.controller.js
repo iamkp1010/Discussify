@@ -135,10 +135,8 @@ async function logout(req,res){
 }
 
 async function protected(req,res){
-    console.log(req.user)
     res.json({msg:"done"})
 }
-
 
 module.exports = {
     logout,

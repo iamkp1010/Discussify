@@ -1,13 +1,13 @@
 import { Card, Container, Skeleton, Stack, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import {CommentBrowser} from "../components/CommentBrowser";
-import {ErrorAlert} from "../components/ErrorAlert";
-import {FindUsers} from "../components/FindUsers";
-import {GridLayout} from "../components/GridLayout";
-import {PostBrowser} from "../components/PostBrowser";
-import {Profile} from "../components/Profile";
-import {ProfileTabs} from "../components/ProfileTabs";
+import { CommentBrowser } from "../components/CommentBrowser";
+import { ErrorAlert } from "../components/ErrorAlert";
+import { FindUsers } from "../components/FindUsers";
+import { GridLayout } from "../components/GridLayout";
+import { PostBrowser } from "../components/PostBrowser";
+import { Profile } from "../components/Profile";
+import { ProfileTabs } from "../components/ProfileTabs";
 import { getUserDataFromLocalStorage } from "../helpers/authHelper";
 import { fetchUserInfoApi, updateUserApi } from "../services/userService";
 import { MobileProfile } from "../components/MobileProfile";
@@ -25,12 +25,12 @@ export const ProfileView = () => {
 
   const fetchUser = async () => {
     setLoading(true);
-    if(params?.id){
+    if (params?.id) {
       const data = await fetchUserInfoApi(params.id);
       setLoading(false);
       if (data?.error) {
         setError(data.error);
-      } else if(data) {
+      } else if (data) {
         setProfile(data);
       }
     }
@@ -41,7 +41,7 @@ export const ProfileView = () => {
 
     const content = e.target.content.value;
     await updateUserApi({ biography: content });
-    setProfile({ ...profile,biography: content });
+    setProfile({ ...profile, biography: content });
     setEditing(false);
   };
 
@@ -50,7 +50,7 @@ export const ProfileView = () => {
   };
 
   const handleMessage = () => {
-    navigate("/messenger", { state: { user: profile.user } });
+    navigate("/messenger", { state: { user: profile } });
   };
 
   useEffect(() => {
@@ -71,18 +71,10 @@ export const ProfileView = () => {
   if (profile) {
     tabs = {
       posts: (
-        <PostBrowser
-          profileUser={profile}
-          contentType="posts"
-          key="posts"
-        />
+        <PostBrowser profileUser={profile} contentType="posts" key="posts" />
       ),
       votes: (
-        <PostBrowser
-          profileUser={profile}
-          contentType="votes"
-          key="votes"
-        />
+        <PostBrowser profileUser={profile} contentType="votes" key="votes" />
       ),
       comments: <CommentBrowser profileUser={profile} />,
     };
@@ -102,24 +94,47 @@ export const ProfileView = () => {
               validate={validate}
             />
             <Stack spacin g={2}>
-              {!error ? (profile ?(
-                <>
-                  <ProfileTabs tab={tab} setTab={setTab} />
-                  {tabs[tab]}
-                </>
-              ) : ( 
-                <>
-                <Skeleton variant="rectangular" height="50px" width="100%" style={{marginTop:"20px"}}/>
-                <Skeleton variant="rectangular" height="70px" width="100%" style={{marginTop:"2px"}}/>
-                {Array(5).fill(1).map(()=> <Skeleton variant="rectangular" height="200px" width="100%" style={{marginTop:"20px"}}/>)}
-                </>
-              )) : <ErrorAlert error={error} />}
+              {!error ? (
+                profile ? (
+                  <>
+                    <ProfileTabs tab={tab} setTab={setTab} />
+                    {tabs[tab]}
+                  </>
+                ) : (
+                  <>
+                    <Skeleton
+                      variant="rectangular"
+                      height="50px"
+                      width="100%"
+                      style={{ marginTop: "20px" }}
+                    />
+                    <Skeleton
+                      variant="rectangular"
+                      height="70px"
+                      width="100%"
+                      style={{ marginTop: "2px" }}
+                    />
+                    {Array(5)
+                      .fill(1)
+                      .map(() => (
+                        <Skeleton
+                          variant="rectangular"
+                          height="200px"
+                          width="100%"
+                          style={{ marginTop: "20px" }}
+                        />
+                      ))}
+                  </>
+                )
+              ) : (
+                <ErrorAlert error={error} />
+              )}
             </Stack>
           </>
         }
         right={
           <Stack spacing={2}>
-            {!error && 
+            {!error && (
               <>
                 <Profile
                   profile={profile}
@@ -131,11 +146,10 @@ export const ProfileView = () => {
                 />
                 <FindUsers />
               </>
-            }
+            )}
           </Stack>
         }
       />
     </Container>
   );
 };
-

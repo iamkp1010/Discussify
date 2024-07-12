@@ -90,11 +90,8 @@ export const Navbar = (props) => {
     const res = await protectedApi()
     if(res?.status === 403){
       navigate("/login")
-    }else{
-      console.log("______________")
-      console.log(res)
-      console.log("______________")
     }
+    navigate("/messenger")
   }
       
   return (
@@ -166,7 +163,7 @@ export const Navbar = (props) => {
           </IconButton>
           {user ? (
             <>
-              {/* <IconButton component={Link} to={"/messenger"}> */}
+              {/* <IconButton component={Link} to={"/messenger"} /> */}
               <IconButton onClick={protectedFunCall}>
                 <AiFillMessage />
               </IconButton>

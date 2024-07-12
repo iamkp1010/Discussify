@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-//! Filter out bad words 
-
 const postSchema = new mongoose.Schema({
     author: {
       type: mongoose.Types.ObjectId,

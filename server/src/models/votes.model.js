@@ -5,10 +5,6 @@ const votesSchema = new mongoose.Schema(
     postId: {
       type: mongoose.Types.ObjectId,
       ref: "posts",
-      // validate: {
-      //   validator: () => !this.commentId,
-      //   message: 'Either there should be postId or commentId'
-      // }
     },
     userId: {
       type: mongoose.Types.ObjectId,
@@ -18,10 +14,6 @@ const votesSchema = new mongoose.Schema(
     commentId: {
       type: mongoose.Types.ObjectId,
       ref: "comments",
-      // validate: {
-      //   validator: () => !this.postId,
-      //   message: 'Either there should be postId or commentId'
-      // }
     },
     isUpvoted:{
       type: Boolean,
@@ -37,7 +29,6 @@ const votesSchema = new mongoose.Schema(
   }
 );
 
-//! test this
 votesSchema.pre('save', async function (next) {
   if((this.postId === undefined && this.commentId === undefined) || 
      (this.postId !== undefined && this.commentId !== undefined )){

@@ -2,14 +2,14 @@ import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { removeUserDataFromLocalStorage } from "../helpers/authHelper";
 
-const API = await axios.create({baseURL:`${BACKEND_URL}`, withCredentials: true})
+const API = await axios.create({baseURL:`${BACKEND_URL}/api`, withCredentials: true})
 
 API.interceptors.response.use(
     (res) => res.data,
     async (err) => {
         if(err.response?.status === 401){
             try{
-                const axiosInstance = await axios.create({baseURL:`${BACKEND_URL}/auth`, withCredentials: true}) 
+                const axiosInstance = await axios.create({baseURL:`${BACKEND_URL}/api/auth`, withCredentials: true}) 
                 await axiosInstance.post("/tokenRefresh");
                 return API.request(err.config)
             }
